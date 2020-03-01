@@ -39,16 +39,17 @@ def BoardIsValid(stateStr):
         return biv
     
     #Game is over
-    x = re.findall("[ox]", stateStr)
-    if len(x) == len(stateStr):
+    x = re.findall("[ox]", stateStr) 
+    if len(x) == len(stateStr) and len(stateStr) == 9:
         return biv
 
     #Check for invalid characters
     x = re.findall("[ox\s]", stateStr)
-    if len(x) == len(stateStr):
+    if len(x) == len(stateStr) and len(stateStr) == 9:
        biv = True
 
     return biv
+
 
 def MarkBox(boardState, index):
     bstr = list(boardState)
@@ -79,11 +80,10 @@ def MakeMove(boardState):
     for y in range(8):
         line = WinningLines()[y]
         moves = itemgetter(*line)(boardState)
-        boxes = itemgetter(*[0,1,2])(line)
         strMoves = "".join(moves)
         if((strMoves.count('x') == 2 or strMoves.count('o') == 2) and strMoves.find(' ') != -1):
             nm = moves.index(' ')
-            nextMove = boxes[nm]
+            nextMove = line[nm]
             return MarkBox(boardState, nextMove)
     
     #Mark opposite corner
@@ -98,7 +98,7 @@ def MakeMove(boardState):
     moves = itemgetter(*middle)(boardState)
     strMoves = "".join(moves)
     if(strMoves.find(' ') != -1):
-        nextMove = corners[moves.index(' ')]
+        nextMove = middle[moves.index(' ')]
         return MarkBox(boardState, nextMove)
 
 
@@ -107,10 +107,12 @@ def MakeMove(boardState):
 
 #Check if the game is won
 def CheckWin(boardState):
-    line = [0,0,0]
+    line = []
     for y in range(8):
         line = WinningLines()[y]
-        if ((boardState[line[0]] == boardState[line[1]]) and (boardState[line[0]] == boardState[line[2]]) and boardState[line[0]] != ' '):
+        moves = itemgetter(*line)(boardState)
+        strMoves = "".join(moves)
+        if (strMoves.count('x') == 3 or strMoves.count('o') == 3):
             return True
         else:
             return False
