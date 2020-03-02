@@ -114,8 +114,8 @@ def CheckWin(boardState):
         strMoves = "".join(moves)
         if (strMoves.count('x') == 3 or strMoves.count('o') == 3):
             return True
-        else:
-            return False
+
+    return False
 
 
 
@@ -125,10 +125,7 @@ def waveTTTgame():
     """Make sure we have values for the boardstate"""
     boardState = request.args.get("board", default=None, type=str)
     if boardState is None or not boardState:
-           boardState = None
-           
-    if boardState is None: 
-        return BadBoard()
+           return BadBoard()
 
     #Make sure values for the boardstate are valid
     boardState = str(boardState).lower()
